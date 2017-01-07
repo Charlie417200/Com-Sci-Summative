@@ -27,6 +27,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
 @property (weak, nonatomic) IBOutlet UIButton *finishButton;
 @property (weak, nonatomic) IBOutlet UILabel *wordDefBox;
+@property (weak, nonatomic) IBOutlet UIScrollView *ScrollBox;
 
 //Button Function Declaration
 - (IBAction)ArtAction:(id)sender;
@@ -34,9 +35,8 @@
 - (IBAction)PQAction:(id)sender;
 - (IBAction)NegativeAction:(id)sender;
 - (IBAction)SATAction:(id)sender;
-- (IBAction)NextAction:(id)sender;
+- (IBAction)NextAction:(id)sender :(NSArray*) lines;
 - (IBAction)FinishAction:(id)sender;
-
 
 @end
 
@@ -45,6 +45,9 @@
 
 //Button Functions
 - (IBAction)ArtAction:(id)sender {
+    
+    //Variable declaration
+    //int i = 2;
     
     //hiding all of the images
     self.LearnWTitle.hidden = false;
@@ -61,22 +64,27 @@
     self.nextButton.hidden = false;
     self.finishButton.hidden = true;
     self.wordDefBox.hidden = false;
+    self.ScrollBox.hidden = false;
+    //open file
+    NSURL *myURL = [[NSBundle mainBundle]
+                    URLForResource: @"artList" withExtension:@"txt"];
+    NSError *error = nil;
+    NSString *string = [NSString stringWithContentsOfURL:myURL encoding:NSUTF8StringEncoding error:&error];
     
-    //open file THIS IS WHAT IS NOT WORKING
-    //@autoreleasepool {
+    if (string) {
+        NSArray *lines = [string componentsSeparatedByString:@"\n"];
         
-        NSURL *url = [NSURL fileURLWithPath:@"artList.txt"];
-        
-        NSString *fileContent = [NSString stringWithContentsOfURL:url encoding: NSUTF8StringEncoding error:nil];
-        
-        NSLog(@"fileContent = %@", fileContent);
-        _wordDefBox.text = [NSString stringWithFormat:@"%@%@",_wordDefBox.text, fileContent];
-   // }
+        //output first definition to screen
+        _wordDefBox.text = [NSString stringWithFormat:@"%@%@",_wordDefBox.text, lines[0]];
+        _wordDefBox.text = [NSString stringWithFormat:@"%@%s",_wordDefBox.text, "\n"];
+        _wordDefBox.text = [NSString stringWithFormat:@"%@%@",_wordDefBox.text, lines[1]];
+    }
     
-
+    //error checking
+    else {
+        NSLog(@"Unable to load string from %@: %@", myURL, error);
+    }
 }
-
-
 
 - (IBAction)HappyAction:(id)sender {
     
@@ -95,6 +103,13 @@
     self.nextButton.hidden = false;
     self.finishButton.hidden = true;
     self.wordDefBox.hidden = false;
+    
+    //open file
+    NSURL *MyURL = [[NSBundle mainBundle]
+                    URLForResource: @"happyList" withExtension:@"txt"];
+    NSString *fileContent = [NSString stringWithContentsOfURL:MyURL encoding: NSUTF8StringEncoding error:nil];
+    //output to screen
+    _wordDefBox.text = [NSString stringWithFormat:@"%@%@",_wordDefBox.text, fileContent];
 }
 
 - (IBAction)PQAction:(id)sender {
@@ -115,9 +130,13 @@
     self.finishButton.hidden = true;
     self.wordDefBox.hidden = false;
     
-   // NSString *Deferential = @"deferential: Showing deference; respectful.";
+    //open file
+    NSURL *MyURL = [[NSBundle mainBundle]
+                    URLForResource: @"pqList" withExtension:@"txt"];
+    NSString *fileContent = [NSString stringWithContentsOfURL:MyURL encoding: NSUTF8StringEncoding error:nil];
     
-   // _wordDefBox.text = [NSString stringWithFormat:@"%@%@",_wordDefBox.text, Deferential];
+    //output to screen
+    _wordDefBox.text = [NSString stringWithFormat:@"%@%@",_wordDefBox.text, fileContent];
     
 }
 
@@ -138,6 +157,13 @@
     self.nextButton.hidden = false;
     self.finishButton.hidden = true;
     self.wordDefBox.hidden = false;
+    
+    //open file
+    NSURL *MyURL = [[NSBundle mainBundle]
+                    URLForResource: @"sadList" withExtension:@"txt"];
+    NSString *fileContent = [NSString stringWithContentsOfURL:MyURL encoding: NSUTF8StringEncoding error:nil];
+    //output to screen
+    _wordDefBox.text = [NSString stringWithFormat:@"%@%@",_wordDefBox.text, fileContent];
 }
 
 - (IBAction)SATAction:(id)sender {
@@ -157,10 +183,18 @@
     self.nextButton.hidden = false;
     self.finishButton.hidden = true;
     self.wordDefBox.hidden = false;
+    
+    //open file
+    NSURL *MyURL = [[NSBundle mainBundle]
+                    URLForResource: @"SATList" withExtension:@"txt"];
+    NSString *fileContent = [NSString stringWithContentsOfURL:MyURL encoding: NSUTF8StringEncoding error:nil];
+    //output to screen
+    _wordDefBox.text = [NSString stringWithFormat:@"%@%@",_wordDefBox.text, fileContent];
 }
 
-- (IBAction)NextAction:(id)sender {
-    
+- (IBAction)NextAction:(id)sender :(NSArray*) lines {
+
+
     //hiding all of the images
     self.LearnWTitle.hidden = false;
     self.ArtPic.hidden = true;
@@ -176,7 +210,8 @@
     self.nextButton.hidden = false;
     self.finishButton.hidden = true;
     self.wordDefBox.hidden = false;
-}
+    
+    }
 
 - (IBAction)FinishAction:(id)sender {
     
@@ -216,12 +251,10 @@
     self.nextButton.hidden = true;
     self.finishButton.hidden = true;
     self.wordDefBox.hidden = false;
+    self.ScrollBox.hidden = false;
     
-
-    //writing to text box
-    //NSString *data = (@"HEllo this is a test");
+    self.ScrollBox.contentSize = self.wordDefBox.bounds.size;
     
-    //_wordDefBox.text = [NSString stringWithFormat:@"%@%@",_wordDefBox.text, data];
 }
 
 - (void)didReceiveMemoryWarning {
