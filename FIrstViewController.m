@@ -27,7 +27,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
 @property (weak, nonatomic) IBOutlet UIButton *finishButton;
 @property (weak, nonatomic) IBOutlet UILabel *wordDefBox;
-@property (weak, nonatomic) IBOutlet UIScrollView *ScrollBox;
 
 //Button Function Declaration
 - (IBAction)ArtAction:(id)sender;
@@ -35,7 +34,7 @@
 - (IBAction)PQAction:(id)sender;
 - (IBAction)NegativeAction:(id)sender;
 - (IBAction)SATAction:(id)sender;
-- (IBAction)NextAction:(id)sender :(NSArray*) lines;
+- (IBAction)NextAction:(id)sender; //(NSArray*) lines;
 - (IBAction)FinishAction:(id)sender;
 
 @end
@@ -48,6 +47,7 @@
     
     //Variable declaration
     //int i = 2;
+    bool checkNext = false;
     
     //hiding all of the images
     self.LearnWTitle.hidden = false;
@@ -64,7 +64,7 @@
     self.nextButton.hidden = false;
     self.finishButton.hidden = true;
     self.wordDefBox.hidden = false;
-    self.ScrollBox.hidden = false;
+    
     //open file
     NSURL *myURL = [[NSBundle mainBundle]
                     URLForResource: @"artList" withExtension:@"txt"];
@@ -78,6 +78,31 @@
         _wordDefBox.text = [NSString stringWithFormat:@"%@%@",_wordDefBox.text, lines[0]];
         _wordDefBox.text = [NSString stringWithFormat:@"%@%s",_wordDefBox.text, "\n"];
         _wordDefBox.text = [NSString stringWithFormat:@"%@%@",_wordDefBox.text, lines[1]];
+        _wordDefBox.text = [NSString stringWithFormat:@"%@%s",_wordDefBox.text, "\n"];
+        
+
+        
+        for (int i = 2; i < 18; i++) {
+            NSLog(@"inside for loop");
+            checkNext = FALSE;
+            [_nextButton setSelected:TRUE];
+            
+            _wordDefBox.text = [NSString stringWithFormat:@"%@%@",_wordDefBox.text, lines[i]];
+            _wordDefBox.text = [NSString stringWithFormat:@"%@%s",_wordDefBox.text, "\n"];
+            //_wordDefBox.text = [NSString stringWithFormat:@"%@%@",_wordDefBox.text, lines[i+1]];
+            NSLog(@"After word box display");
+         
+            while (checkNext == FALSE) {
+                NSLog(@"inside while loop");
+           
+                if(_nextButton.selected) {
+                    checkNext = TRUE;
+                    NSLog(@"TRUE");
+                    [_nextButton setSelected:FALSE];
+                    
+                }
+            }
+        }
     }
     
     //error checking
@@ -192,8 +217,7 @@
     _wordDefBox.text = [NSString stringWithFormat:@"%@%@",_wordDefBox.text, fileContent];
 }
 
-- (IBAction)NextAction:(id)sender :(NSArray*) lines {
-
+- (IBAction)NextAction:(id)sender { //:(NSArray*) lines {
 
     //hiding all of the images
     self.LearnWTitle.hidden = false;
@@ -210,6 +234,7 @@
     self.nextButton.hidden = false;
     self.finishButton.hidden = true;
     self.wordDefBox.hidden = false;
+    
     
     }
 
@@ -251,9 +276,7 @@
     self.nextButton.hidden = true;
     self.finishButton.hidden = true;
     self.wordDefBox.hidden = false;
-    self.ScrollBox.hidden = false;
-    
-    self.ScrollBox.contentSize = self.wordDefBox.bounds.size;
+ 
     
 }
 
